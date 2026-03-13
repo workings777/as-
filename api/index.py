@@ -18,7 +18,7 @@ def get_sheets_service():
         creds_dict,
         scopes=['https://www.googleapis.com/auth/spreadsheets.readonly']
     )
-    return build('sheets', 'v4', credentials=creds)
+    return build('sheets', 'v4', credentials=creds, cache_discovery=False)
 
 
 def get_as_records(product_code, color):

@@ -26,19 +26,19 @@ def get_as_records(product_code, color):
     service = get_sheets_service()
     result = service.spreadsheets().values().get(
         spreadsheetId=SPREADSHEET_ID,
-        range=f'{SHEET_NAME}!A2:T'
+        range=f'{SHEET_NAME}!A2:AL'
     ).execute()
 
     rows = result.get('values', [])
     records = []
 
     for row in rows:
-        # 최소 7컬럼(증상까지) 있어야 유효한 데이터
+        # 최소 7컬럼(조치요구내역까지) 있어야 유효한 데이터
         if len(row) < 7:
             continue
 
-        row_product = row[4] if len(row) > 4 else ''
-        row_color = row[5] if len(row) > 5 else ''
+        row_product = row[2] if len(row) > 2 else ''
+        row_color = row[3] if len(row) > 3 else ''
 
         # 제품코드 필터 (필수), 색상 필터 (입력된 경우만)
         if row_product.strip().upper() != product_code.strip().upper():
@@ -47,19 +47,20 @@ def get_as_records(product_code, color):
             continue
 
         parts = []
-        for i in range(5):
-            base = 7 + i * 2
+        for i in range(9):
+            base = 7 + i * 3
             code = row[base] if base < len(row) else ''
-            qty = row[base + 1] if base + 1 < len(row) else ''
+            color_code = row[base + 1] if base + 1 < len(row) else ''
+            qty = row[base + 2] if base + 2 < len(row) else ''
             if code:
-                parts.append({'제품코드': code, '수량': qty})
+                parts.append({'자재코드': code, '자재색상코드': color_code, '조치수': qty})
 
         records.append({
-            '접수날짜': row[2] if len(row) > 2 else '',
-            '조치날짜': row[3] if len(row) > 3 else '',
+            '접수일자': row[4] if len(row) > 4 else '',
+            '출고예정일': row[5] if len(row) > 5 else '',
             '제품코드': row_product,
-            '색상': row_color,
-            '증상': row[6] if len(row) > 6 else '',
+            '색상코드': row_color,
+            '조치요구내역': row[6] if len(row) > 6 else '',
             '부품': parts
         })
 
@@ -120,8 +121,9 @@ def recommend():
   ],
   "recommended_parts": [
     {{
-      "제품코드": "코드",
-      "수량": "수량",
+      "자재코드": "코드",
+      "자재색상코드": "색상코드",
+      "조치수": "수량",
       "이유": "추천 이유"
     }}
   ],

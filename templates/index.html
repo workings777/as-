@@ -1,187 +1,188 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AS 부품 추천</title>
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Segoe UI', sans-serif; background: #f5f6fa; color: #2d3436; min-height: 100vh; padding: 24px 16px; }
+  <!DOCTYPE html>
+  <html lang="ko">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AS 부품 추천</title>
+    <style>
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      body { font-family: 'Segoe UI', sans-serif; background: #f5f6fa; color: #2d3436; min-height: 100vh; padding: 24px 16px; }
 
-    .container { max-width: 720px; margin: 0 auto; }
+      .container { max-width: 720px; margin: 0 auto; }
 
-    h1 { font-size: 22px; font-weight: 700; margin-bottom: 24px; color: #1e272e; }
+      h1 { font-size: 22px; font-weight: 700; margin-bottom: 24px; color: #1e272e; }
 
-    .card { background: #fff; border-radius: 12px; padding: 24px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); }
+      .card { background: #fff; border-radius: 12px; padding: 24px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); }
 
-    label { display: block; font-size: 13px; font-weight: 600; color: #636e72; margin-bottom: 6px; }
+      label { display: block; font-size: 13px; font-weight: 600; color: #636e72; margin-bottom: 6px; }
 
-    input, textarea {
-      width: 100%; padding: 10px 14px; border: 1.5px solid #dfe6e9; border-radius: 8px;
-      font-size: 14px; outline: none; transition: border-color 0.2s;
-      font-family: inherit;
-    }
-    input:focus, textarea:focus { border-color: #0984e3; }
+      input, textarea {
+        width: 100%; padding: 10px 14px; border: 1.5px solid #dfe6e9; border-radius: 8px;
+        font-size: 14px; outline: none; transition: border-color 0.2s;
+        font-family: inherit;
+      }
+      input:focus, textarea:focus { border-color: #0984e3; }
 
-    textarea { height: 120px; resize: vertical; }
+      textarea { height: 120px; resize: vertical; }
 
-    .row { display: flex; gap: 12px; margin-bottom: 16px; }
-    .row .field { flex: 1; }
-    .field { margin-bottom: 16px; }
+      .row { display: flex; gap: 12px; margin-bottom: 16px; }
+      .row .field { flex: 1; }
+      .field { margin-bottom: 16px; }
 
-    button {
-      width: 100%; padding: 12px; background: #0984e3; color: #fff;
-      border: none; border-radius: 8px; font-size: 15px; font-weight: 600;
-      cursor: pointer; transition: background 0.2s;
-    }
-    button:hover { background: #0773c5; }
-    button:disabled { background: #b2bec3; cursor: not-allowed; }
+      button {
+        width: 100%; padding: 12px; background: #0984e3; color: #fff;
+        border: none; border-radius: 8px; font-size: 15px; font-weight: 600;
+        cursor: pointer; transition: background 0.2s;
+      }
+      button:hover { background: #0773c5; }
+      button:disabled { background: #b2bec3; cursor: not-allowed; }
 
-    .result-card { background: #fff; border-radius: 12px; padding: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); }
+      .result-card { background: #fff; border-radius: 12px; padding: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); }
 
-    .section-title { font-size: 13px; font-weight: 700; color: #636e72; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px; }
+      .section-title { font-size: 13px; font-weight: 700; color: #636e72; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px; }
 
-    .parts-table { width: 100%; border-collapse: collapse; font-size: 14px; }
-    .parts-table th { background: #f0f3f9; padding: 8px 12px; text-align: left; font-weight: 600; color: #636e72; }
-    .parts-table td { padding: 10px 12px; border-bottom: 1px solid #f0f3f9; }
-    .parts-table tr:last-child td { border-bottom: none; }
-    .parts-table .reason { color: #636e72; font-size: 13px; }
+      .parts-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+      .parts-table th { background: #f0f3f9; padding: 8px 12px; text-align: left; font-weight: 600; color: #636e72; }
+      .parts-table td { padding: 10px 12px; border-bottom: 1px solid #f0f3f9; }
+      .parts-table tr:last-child td { border-bottom: none; }
+      .parts-table .reason { color: #636e72; font-size: 13px; }
 
-    .cases-list { display: flex; flex-direction: column; gap: 8px; }
-    .case-item { background: #f8f9ff; border-radius: 8px; padding: 12px; }
-    .case-badge { display: inline-block; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 20px; margin-bottom: 6px; }
-    .badge-high { background: #d4edda; color: #155724; }
-    .badge-mid { background: #fff3cd; color: #856404; }
-    .badge-low { background: #f8d7da; color: #721c24; }
+      .cases-list { display: flex; flex-direction: column; gap: 8px; }
+      .case-item { background: #f8f9ff; border-radius: 8px; padding: 12px; }
+      .case-badge { display: inline-block; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 20px; margin-bottom: 6px; }
+      .badge-high { background: #d4edda; color: #155724; }
+      .badge-mid { background: #fff3cd; color: #856404; }
+      .badge-low { background: #f8d7da; color: #721c24; }
 
-    .analysis-box { background: #f0f7ff; border-left: 3px solid #0984e3; padding: 12px 14px; border-radius: 0 8px 8px 0; font-size: 14px; line-height: 1.6; }
+      .analysis-box { background: #f0f7ff; border-left: 3px solid #0984e3; padding: 12px 14px; border-radius: 0 8px 8px 0; font-size: 14px; line-height: 1.6; }
 
-    .divider { margin: 20px 0; border: none; border-top: 1px solid #f0f3f9; }
+      .divider { margin: 20px 0; border: none; border-top: 1px solid #f0f3f9; }
 
-    .error-box { background: #fff5f5; border-left: 3px solid #e17055; padding: 12px 14px; border-radius: 0 8px 8px 0; font-size: 14px; color: #c0392b; }
+      .error-box { background: #fff5f5; border-left: 3px solid #e17055; padding: 12px 14px; border-radius: 0 8px 8px 0; font-size: 14px; color: #c0392b; }
 
-    .loading { text-align: center; padding: 20px; color: #636e72; font-size: 14px; }
-    .spinner { display: inline-block; width: 20px; height: 20px; border: 2px solid #dfe6e9; border-top-color: #0984e3; border-radius: 50%; animation: spin 0.8s linear infinite; vertical-align: middle; margin-right: 8px; }
-    @keyframes spin { to { transform: rotate(360deg); } }
+      .loading { text-align: center; padding: 20px; color: #636e72; font-size: 14px; }
+      .spinner { display: inline-block; width: 20px; height: 20px; border: 2px solid #dfe6e9; border-top-color: #0984e3; border-radius: 50%; animation: spin 0.8s linear infinite; vertical-align: middle; margin-right: 8px; }
+      @keyframes spin { to { transform: rotate(360deg); } }
 
-    #result { display: none; }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <h1>AS 부품 추천</h1>
+      #result { display: none; }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>AS 부품 추천</h1>
 
-    <div class="card">
-      <div class="row">
-        <div class="field">
-          <label for="product_code">제품코드</label>
-          <input type="text" id="product_code" placeholder="예) ABC-123">
+      <div class="card">
+        <div class="row">
+          <div class="field">
+            <label for="product_code">제품코드</label>
+            <input type="text" id="product_code" placeholder="예) ABC-123">
+          </div>
+          <div class="field">
+            <label for="color">색상 <span style="font-weight:400;color:#b2bec3">(선택)</span></label>
+            <input type="text" id="color" placeholder="예) BK">
+          </div>
         </div>
         <div class="field">
-          <label for="color">색상 <span style="font-weight:400;color:#b2bec3">(선택)</span></label>
-          <input type="text" id="color" placeholder="예) BK">
+          <label for="symptoms">접수 증상</label>
+          <textarea id="symptoms" placeholder="증상을 붙여넣기 또는 입력하세요"></textarea>
+        </div>
+        <div style="display:flex;gap:8px;">
+          <button id="submit-btn" onclick="recommend()" style="flex:1;width:auto;">부품 추천 받기</button>
+          <button type="button" onclick="resetForm()" style="flex:none;width:auto;padding:12px 20px;background:#636e72;color:#fff;">초기화</button>
         </div>
       </div>
-      <div class="field">
-        <label for="symptoms">접수 증상</label>
-        <textarea id="symptoms" placeholder="증상을 붙여넣기 또는 입력하세요"></textarea>
-      </div>
-      <div style="display:flex;gap:8px;">
-        <button id="submit-btn" onclick="recommend()" style="flex:1;width:auto;">부품 추천 받기</button>
-        <button type="button" onclick="resetForm()" style="flex:none;width:auto;padding:12px 20px;background:#636e72;color:#fff;">초기화</button>
-      </div>
+
+      <div id="result" class="result-card"></div>
     </div>
 
-    <div id="result" class="result-card"></div>
-  </div>
+    <script>
+      async function recommend() {
+        const product_code = document.getElementById('product_code').value.trim();
+        const color = document.getElementById('color').value.trim();
+        const symptoms = document.getElementById('symptoms').value.trim();
 
-  <script>
-    async function recommend() {
-      const product_code = document.getElementById('product_code').value.trim();
-      const color = document.getElementById('color').value.trim();
-      const symptoms = document.getElementById('symptoms').value.trim();
-
-      if (!product_code || !symptoms) {
-        alert('제품코드와 증상을 입력해주세요.');
-        return;
-      }
-
-      const btn = document.getElementById('submit-btn');
-      const resultEl = document.getElementById('result');
-      btn.disabled = true;
-      resultEl.style.display = 'block';
-      resultEl.innerHTML = '<div class="loading"><span class="spinner"></span>AI가 유사 케이스를 분석 중입니다...</div>';
-
-      try {
-        const res = await fetch('/api/recommend', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ product_code, color, symptoms })
-        });
-        const data = await res.json();
-
-        if (data.error) {
-          resultEl.innerHTML = `<div class="error-box">${data.error}</div>`;
+        if (!product_code || !symptoms) {
+          alert('제품코드와 증상을 입력해주세요.');
           return;
         }
 
-        resultEl.innerHTML = buildResult(data);
-      } catch (e) {
-        resultEl.innerHTML = '<div class="error-box">서버 연결 오류가 발생했습니다.</div>';
-      } finally {
-        btn.disabled = false;
-      }
-    }
+        const btn = document.getElementById('submit-btn');
+        const resultEl = document.getElementById('result');
+        btn.disabled = true;
+        resultEl.style.display = 'block';
+        resultEl.innerHTML = '<div class="loading"><span class="spinner"></span>AI가 유사 케이스를 분석 중입니다...</div>';
 
-    function buildResult(data) {
-      let html = '';
+        try {
+          const res = await fetch('/api/recommend', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ product_code, color, symptoms })
+          });
+          const data = await res.json();
 
-      // 추천 부품
-      if (data.recommended_parts && data.recommended_parts.length > 0) {
-        html += '<div class="section-title">추천 부품</div>';
-        html += '<table class="parts-table"><thead><tr><th>자재코드</th><th>자재색상코드</th><th>조치수</th><th>추천 이유</th></tr></thead><tbody>';
-        for (const p of data.recommended_parts) {
-          html += `<tr>
-            <td><strong class="copy-code" onclick="copyCode(this)" title="클릭하여 복사" style="cursor:pointer;color:#0984e3;">${p['자재코드'] || '-'}</strong></td>
-            <td>${p['자재색상코드'] || '-'}</td>
-            <td>${p['조치수'] || '-'}</td>
-            <td class="reason">${p['이유'] || ''}</td>
-          </tr>`;
+          if (data.error) {
+            resultEl.innerHTML = `<div class="error-box">${data.error}</div>`;
+            return;
+          }
+
+          resultEl.innerHTML = buildResult(data);
+        } catch (e) {
+          resultEl.innerHTML = '<div class="error-box">서버 연결 오류가 발생했습니다.</div>';
+        } finally {
+          btn.disabled = false;
         }
-        html += '</tbody></table>';
       }
 
-      // 분석 요약
-      if (data['분석']) {
-        html += '<hr class="divider">';
-        html += '<div class="section-title">분석 요약</div>';
-        html += `<div class="analysis-box">${data['분석']}</div>`;
+      function buildResult(data) {
+        let html = '';
+
+        // 추천 부품
+        if (data.recommended_parts && data.recommended_parts.length > 0) {
+          html += '<div class="section-title">추천 부품</div>';
+          html += '<table class="parts-table"><thead><tr><th>품목코드</th><th>색상</th><th>조치수량</th><th>품목명</th><th>추천 이유</th></tr></thead><tbody>';
+          for (const p of data.recommended_parts) {
+            html += `<tr>
+              <td><strong class="copy-code" onclick="copyCode(this)" title="클릭하여 복사" style="cursor:pointer;color:#0984e3;">${p['품목코드'] || '-'}</strong></td>
+              <td>${p['색상'] || '-'}</td>
+              <td>${p['조치수량'] || '-'}</td>
+              <td>${p['품목명'] || '-'}</td>
+              <td class="reason">${p['이유'] || ''}</td>
+            </tr>`;
+          }
+          html += '</tbody></table>';
+        }
+
+        // 분석 요약
+        if (data['분석']) {
+          html += '<hr class="divider">';
+          html += '<div class="section-title">분석 요약</div>';
+          html += `<div class="analysis-box">${data['분석']}</div>`;
+        }
+
+
+        return html;
       }
 
+      function copyCode(el) {
+        navigator.clipboard.writeText(el.textContent).then(() => {
+          const orig = el.textContent;
+          el.textContent = '복사됨!';
+          setTimeout(() => { el.textContent = orig; }, 1000);
+        });
+      }
 
-      return html;
-    }
+      function resetForm() {
+        document.getElementById('product_code').value = '';
+        document.getElementById('color').value = '';
+        document.getElementById('symptoms').value = '';
+        const resultEl = document.getElementById('result');
+        resultEl.style.display = 'none';
+        resultEl.innerHTML = '';
+      }
 
-    function copyCode(el) {
-      navigator.clipboard.writeText(el.textContent).then(() => {
-        const orig = el.textContent;
-        el.textContent = '복사됨!';
-        setTimeout(() => { el.textContent = orig; }, 1000);
-      });
-    }
-
-    function resetForm() {
-      document.getElementById('product_code').value = '';
-      document.getElementById('color').value = '';
-      document.getElementById('symptoms').value = '';
-      const resultEl = document.getElementById('result');
-      resultEl.style.display = 'none';
-      resultEl.innerHTML = '';
-    }
-
-    // Enter 키로 제출 (textarea 제외)
-    document.getElementById('product_code').addEventListener('keydown', e => { if (e.key === 'Enter') recommend(); });
-    document.getElementById('color').addEventListener('keydown', e => { if (e.key === 'Enter') recommend(); });
-  </script>
-</body>
-</html>
+      // Enter 키로 제출 (textarea 제외)
+      document.getElementById('product_code').addEventListener('keydown', e => { if (e.key === 'Enter') recommend(); });
+      document.getElementById('color').addEventListener('keydown', e => { if (e.key === 'Enter') recommend(); });
+    </script>
+  </body>
+  </html>

@@ -1,6 +1,6 @@
 import os
 import json
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, Response
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
 import anthropic
@@ -65,6 +65,12 @@ def get_as_records(product_code, color):
 
     return records
 
+
+@app.route('/')
+def index():
+    html_path = os.path.join(os.path.dirname(__file__), '..', 'templates', 'index.html')
+    with open(html_path, encoding='utf-8') as f:
+        return Response(f.read(), mimetype='text/html')
 
 
 @app.route('/api/recommend', methods=['POST'])

@@ -88,7 +88,7 @@
       </div>
       <div style="display:flex;gap:8px">
         <button id="submit-btn" onclick="recommend()">부품 추천 받기</button>
-        <button type="button" onclick="resetForm()" style="width:auto;padding:12px 20px;background:#dfe6e9;color:#2d3436;">초기화</button>
+        <button type="button" onclick="resetForm()" style="width:auto;padding:12px 20px;background:#dfe6e9;color:#2d3436;white-space:nowrap;flex-shrink:0;">초기화</button>
       </div>
     </div>
 
@@ -142,7 +142,7 @@
         html += '<table class="parts-table"><thead><tr><th>자재코드</th><th>자재색상코드</th><th>조치수</th><th>추천 이유</th></tr></thead><tbody>';
         for (const p of data.recommended_parts) {
           html += `<tr>
-            <td><strong>${p['자재코드'] || '-'}</strong></td>
+            <td><strong class="copy-code" onclick="copyCode(this)" title="클릭하여 복사" style="cursor:pointer;color:#0984e3;">${p['자재코드'] || '-'}</strong></td>
             <td>${p['자재색상코드'] || '-'}</td>
             <td>${p['조치수'] || '-'}</td>
             <td class="reason">${p['이유'] || ''}</td>
@@ -160,6 +160,14 @@
 
 
       return html;
+    }
+
+    function copyCode(el) {
+      navigator.clipboard.writeText(el.textContent).then(() => {
+        const orig = el.textContent;
+        el.textContent = '복사됨!';
+        setTimeout(() => { el.textContent = orig; }, 1000);
+      });
     }
 
     function resetForm() {

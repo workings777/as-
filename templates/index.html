@@ -136,12 +136,12 @@
       // 추천 부품
       if (data.recommended_parts && data.recommended_parts.length > 0) {
         html += '<div class="section-title">추천 부품</div>';
-        html += '<table class="parts-table"><thead><tr><th>제품코드</th><th>색상코드</th><th>수량</th><th>추천 이유</th></tr></thead><tbody>';
+        html += '<table class="parts-table"><thead><tr><th>자재코드</th><th>자재색상코드</th><th>조치수</th><th>추천 이유</th></tr></thead><tbody>';
         for (const p of data.recommended_parts) {
           html += `<tr>
-            <td><strong>${p['제품코드'] || '-'}</strong></td>
-            <td>${p['색상코드'] || '-'}</td>
-            <td>${p['수량'] || '-'}</td>
+            <td><strong>${p['자재코드'] || '-'}</strong></td>
+            <td>${p['자재색상코드'] || '-'}</td>
+            <td>${p['조치수'] || '-'}</td>
             <td class="reason">${p['이유'] || ''}</td>
           </tr>`;
         }

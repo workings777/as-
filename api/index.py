@@ -13,8 +13,12 @@ SHEET_NAME = os.environ.get('SHEET_NAME', 'Sheet1')
 
 
 def get_sheets_service():
-    creds_json = os.environ.get('GOOGLE_SERVICE_ACCOUNT_JSON')
-    creds_dict = json.loads(creds_json)
+    file_path = os.environ.get('GOOGLE_SERVICE_ACCOUNT_FILE')
+    if file_path:
+        with open(file_path, encoding='utf-8') as f:
+            creds_dict = json.load(f)
+    else:
+        creds_dict = json.loads(os.environ.get('GOOGLE_SERVICE_ACCOUNT_JSON'))
     creds = service_account.Credentials.from_service_account_info(
         creds_dict,
         scopes=['https://www.googleapis.com/auth/spreadsheets.readonly']
@@ -26,7 +30,7 @@ def get_as_records(product_code, color):
     service = get_sheets_service()
     result = service.spreadsheets().values().get(
         spreadsheetId=SPREADSHEET_ID,
-        range=f'{SHEET_NAME}!A2:AL'
+        range=f'{SHEET_NAME}!A2:AQ'
     ).execute()
 
     rows = result.get('values', [])
@@ -47,13 +51,14 @@ def get_as_records(product_code, color):
             continue
 
         parts = []
-        for i in range(9):
-            base = 7 + i * 3
+        for i in range(10):
+            base = 7 + i * 4
             code = row[base] if base < len(row) else ''
             color_code = row[base + 1] if base + 1 < len(row) else ''
             qty = row[base + 2] if base + 2 < len(row) else ''
+            name = row[base + 3] if base + 3 < len(row) else ''
             if code:
-                parts.append({'자재코드': code, '자재색상코드': color_code, '조치수': qty})
+                parts.append({'품목코드': code, '색상': color_code, '조치수량': qty, '품목명': name})
 
         records.append({
             '접수일자': row[4] if len(row) > 4 else '',
@@ -114,9 +119,10 @@ def recommend():
 {{
   "recommended_parts": [
     {{
-      "자재코드": "코드",
-      "자재색상코드": "색상코드",
-      "조치수": "수량",
+      "품목코드": "코드",
+      "색상": "색상코드",
+      "조치수량": "수량",
+      "품목명": "품목명",
       "이유": "추천 이유 한 줄"
     }}
   ],
@@ -139,3 +145,7 @@ def recommend():
 
     except Exception as e:
         return jsonify({'error': f'AI 분석 오류: {str(e)}'}), 500
+
+
+if __name__ == '__main__':
+    app.run(debug=True)

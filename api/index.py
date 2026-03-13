@@ -32,14 +32,12 @@ def get_as_records(product_code, color):
     records = []
 
     for row in rows:
-        # 최소 5컬럼(증상까지) 있어야 유효한 데이터
         if len(row) < 5:
             continue
 
         row_product = row[2] if len(row) > 2 else ''
         row_color = row[3] if len(row) > 3 else ''
 
-        # 제품코드 필터 (필수), 색상 필터 (입력된 경우만)
         if row_product.strip().upper() != product_code.strip().upper():
             continue
         if color and row_color.strip().upper() != color.strip().upper():

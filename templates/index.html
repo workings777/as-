@@ -155,21 +155,6 @@
         html += `<div class="analysis-box">${data['분석']}</div>`;
       }
 
-      // 유사 케이스
-      if (data.similar_cases && data.similar_cases.length > 0) {
-        html += '<hr class="divider">';
-        html += '<div class="section-title">참고한 유사 케이스</div>';
-        html += '<div class="cases-list">';
-        for (const c of data.similar_cases) {
-          const badgeClass = c['유사도'] === '높음' ? 'badge-high' : c['유사도'] === '중간' ? 'badge-mid' : 'badge-low';
-          html += `<div class="case-item">
-            <span class="case-badge ${badgeClass}">${c['유사도']}</span>
-            <div style="font-size:14px">${c['증상'] || ''}</div>
-            ${c['조치날짜'] ? `<div style="font-size:12px;color:#b2bec3;margin-top:4px">${c['조치날짜']}</div>` : ''}
-          </div>`;
-        }
-        html += '</div>';
-      }
 
       return html;
     }

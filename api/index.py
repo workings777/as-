@@ -9,7 +9,7 @@ import anthropic
 app = Flask(__name__)
 
 SPREADSHEET_ID = os.environ.get('SPREADSHEET_ID', '1Y-BpCKJxuvWlAD22KORs5IMfrjk51Fcq63CEHoRGMtQ')
-SHEET_NAME = os.environ.get('SHEET_NAME', 'Sheet1')
+SHEET_NAME = os.environ.get('SHEET_NAME', '시트1')
 
 
 def get_sheets_service():

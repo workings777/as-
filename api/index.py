@@ -1,11 +1,11 @@
 import os
 import json
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, jsonify
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
 import anthropic
 
-app = Flask(__name__, template_folder='../templates')
+app = Flask(__name__)
 
 SPREADSHEET_ID = os.environ.get('SPREADSHEET_ID', '1Y-BpCKJxuvWlAD22KORs5IMfrjk51Fcq63CEHoRGMtQ')
 SHEET_NAME = os.environ.get('SHEET_NAME', 'Sheet1')
@@ -65,10 +65,6 @@ def get_as_records(product_code, color):
 
     return records
 
-
-@app.route('/')
-def index():
-    return render_template('index.html')
 
 
 @app.route('/api/recommend', methods=['POST'])

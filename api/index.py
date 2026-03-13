@@ -69,7 +69,7 @@ def get_as_records(product_code, color):
             '부품': parts
         })
 
-    return records
+    return records[-100:]
 
 
 @app.route('/')

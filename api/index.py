@@ -9,7 +9,7 @@ import anthropic
 app = Flask(__name__)
 
 SPREADSHEET_ID = os.environ.get('SPREADSHEET_ID', '1Y-BpCKJxuvWlAD22KORs5IMfrjk51Fcq63CEHoRGMtQ')
-SHEET_NAME = os.environ.get('SHEET_NAME', '시트1')
+SHEET_NAME = os.environ.get('SHEET_NAME', 'Sheet1')
 
 
 def get_sheets_service():
@@ -30,7 +30,7 @@ def get_as_records(product_code, color):
     service = get_sheets_service()
     result = service.spreadsheets().values().get(
         spreadsheetId=SPREADSHEET_ID,
-        range=f'{SHEET_NAME}!A2:AQ'
+        range=f"'{SHEET_NAME}'!A2:AQ"
     ).execute()
 
     rows = result.get('values', [])

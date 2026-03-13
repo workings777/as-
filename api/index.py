@@ -18,7 +18,7 @@ def get_sheets_service():
         with open(file_path, encoding='utf-8') as f:
             creds_dict = json.load(f)
     else:
-        creds_dict = json.loads(os.environ.get('GOOGLE_SERVICE_ACCOUNT_JSON'))
+        creds_dict = json.loads(os.environ.get('GOOGLE_SERVICE_ACCOUNT_JSON').strip())
     creds = service_account.Credentials.from_service_account_info(
         creds_dict,
         scopes=['https://www.googleapis.com/auth/spreadsheets.readonly']
